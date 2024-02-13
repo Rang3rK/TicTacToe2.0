@@ -10,7 +10,6 @@ public class GameLogic {
 
     //bool flag
     boolean winner_found = false;
-
     /** ask each player to enter coordinates until all the slots are filled.
      * If the slot is taken, ask again
      * Else, place
