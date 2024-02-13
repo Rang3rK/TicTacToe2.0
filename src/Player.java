@@ -1,33 +1,20 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 public class Player {
     Scanner myObj = new Scanner(System.in);
     public static int no_of_players;
+
     /**player array*/
     public static Player[] players;
     private static int num_winning_row;
     private char player_icon;
 
 
-    //function to ask each player's character choice
+    //asking each player's character choice
     public void player_char()
     {
-        System.out.print("Please enter winning row (3-" + (no_of_players+1) + "): ");
-
-        while(!myObj.hasNextInt())
-        {
-            System.out.print("Invalid. Choose from (3-" + (no_of_players+1) + "): ");
-            myObj.next();
-        }
-
-        num_winning_row = myObj.nextInt();
-        //Restricting the choice
-        while((num_winning_row > no_of_players + 1) || (num_winning_row < 3) )
-        {
-            System.out.print("Invalid. Choose from (3-" + (no_of_players+1) + "): ");
-            num_winning_row = myObj.nextInt();
-        }
-
-        //iterate player array, asking each player to select a character of choice
+        ask_winning_row();
+        //iterate the player array, asking each player to select a character of choice
         //if it is taken, ask user to enter again.
         for(int i=0; i< no_of_players; i++)
         {
@@ -46,7 +33,31 @@ public class Player {
         }
     }
 
-    //accessor, getter method
+    // ask user to input consecutive winning condition
+    public void ask_winning_row()
+    {
+        boolean is_valid = false;
+        System.out.print("Please enter winning row (3-" + (no_of_players + 1) + "): ");
+
+        try {
+            while(!is_valid) {
+
+                num_winning_row = myObj.nextInt();
+                //Restricting
+                if (num_winning_row >= 3 && num_winning_row <= no_of_players + 1) {
+                    is_valid = true;
+                } else {
+                    System.out.print("Invalid. Out of Bounds. Choose from (3-" + (no_of_players + 1) + "): ");
+                }
+            }
+        } catch (InputMismatchException e) {
+            System.out.print("Error Catch : Invalid. Enter Integers only. ");
+            myObj.next();
+            ask_winning_row();  //recursive call
+        }
+    }
+
+    /** accessor, getter methods */
     public static int get_no_of_players()
     {
         return no_of_players;

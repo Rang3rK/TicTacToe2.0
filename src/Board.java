@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Board {
@@ -6,7 +7,7 @@ public class Board {
 
     static Scanner in = new Scanner(System.in);
 
-    /**Board constructor to make Board object with row and col initialized*/
+    /**Board constructor to build Board object with row and col initialized*/
     public Board(int row, int col) {
         Board.row = row + 1;
         Board.col = col + 1;
@@ -28,7 +29,6 @@ public class Board {
             System.out.print("   " + j + " ");
         }
         System.out.println();
-        System.out.println("---------------------");
 
         for (int i = 0; i < row; i++) {
             System.out.print(i);
@@ -40,38 +40,38 @@ public class Board {
         }
     }
 
-    /** Get number of players and determine the board size and initialize the board object
+    /** Get number of players, determine the board size and initialize the board object
      * */
     public static void customize_board() {
-
-        System.out.print("Enter number of players (3-10): ");
-
-        //error handling when the user enters a non-integer
-        while((!in.hasNextInt()))
-        {
-            System.out.print("Invalid. Choose from (3-10):");
-            in.next();
-        }
-        Player.no_of_players = in.nextInt();
-
-        //Bounds for userInput of number of players
-        //error handling when the user enters an integer outside of range
-        while((Player.no_of_players < 3 || Player.no_of_players > 10))
-        {
-            System.out.print("Invalid. Choose from (3-10):");
+        try {
+            System.out.print("Enter number of players (3-10): ");
             Player.no_of_players = in.nextInt();
-        }
+            //error handling when the user enters a non-integer
 
-        //Initialize players
-        Player.players = new Player[Player.no_of_players];
-        for (int i = 0; i < Player.no_of_players; i++) {
-            Player.players[i] = new Player();
-        }
+            //Bounds for userInput of number of players
+            //error handling when the user enters an integer outside of range
+            while ((Player.no_of_players < 3 || Player.no_of_players > 10)) {
+                System.out.print("Invalid. Out of Bounds. Choose from (3-10): ");
+                Player.no_of_players = in.nextInt();
+            }
 
-        //Initialize the board
-        Board t_board = new Board(Board.row = Player.no_of_players, Board.col = Player.no_of_players);
-        t_board.init_board();
-        print_board();
+            //Initialize players
+            Player.players = new Player[Player.no_of_players];
+            for (int i = 0; i < Player.no_of_players; i++) {
+                Player.players[i] = new Player();
+            }
+
+            //Initialize the board
+            Board t_board = new Board(Board.row = Player.no_of_players, Board.col = Player.no_of_players);
+            t_board.init_board();
+            //print it after each move
+            print_board();
+        } catch (InputMismatchException e)  //catch if user input non-integer
+        {
+            System.out.println("Error Catch : Enter integers only.");
+            in.next();
+            customize_board(); //recursive call
+        }
     }
 
     //accessors, getter method
